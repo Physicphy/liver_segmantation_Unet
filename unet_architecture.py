@@ -10,14 +10,18 @@ from metrics import Metrics
 
 class UnetArchitecture(Metrics):
 
-    def __init__(self, img_rows, img_cols):
+    def __init__(self, img_rows, img_cols, verbose=True):
         super().__init__()
         self.img_rows = img_rows
         self.img_cols = img_cols
+        self.verbose = verbose
 
+        if self.verbose:
+            print('-' * 70)
+            print(f'Creating networt U-Net architecture...')
         self.set_unet_model()
 
-    def set_unet_model(self, save_archtecture_img=False):
+    def set_unet_model(self):
 
         inputs = Input((self.img_rows, self.img_cols, 1))
         conv1 = Conv2D(32, (3, 3), activation='relu', padding='same')(inputs)
@@ -67,7 +71,7 @@ class UnetArchitecture(Metrics):
 
         self.model = Model(inputs=[inputs], outputs=[conv10])
 
-        if save_archtecture_img:
+        if self.verbose:
             filepath = path.join(getcwd(), 'outputs/Unet_architecture.png')
             plot_model(self.model, to_file=filepath, show_shapes=True)
 
